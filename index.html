@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Apriori Dashboard</title>
+    <!-- Premium Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Animated Aurora Background -->
+    <div class="bg-container">
+        <div class="bg-orb orb-1"></div>
+        <div class="bg-orb orb-2"></div>
+        <div class="bg-orb orb-3"></div>
+    </div>
+    
+    <!-- Premium Noise Overlay -->
+    <div class="bg-noise"></div>
+
+    <div class="dashboard-layout">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar glass-panel">
+            <div class="sidebar-header">
+                <h1 class="gradient-text">Apriori Analysis</h1>
+                <p class="subtitle">Hotel Booking Demand</p>
+            </div>
+            <nav class="sidebar-nav" id="step-nav">
+                <!-- Step items injected by JS -->
+            </nav>
+        </aside>
+
+        <!-- Main Content Area (Split Pane) -->
+        <main class="split-container">
+            <!-- Mobile Toggle (Only visible on small screens) -->
+            <div class="mobile-toggle glass-panel">
+                <button id="mobile-toggle-btn" class="toggle-btn active"><i class="fas fa-columns"></i> View Output</button>
+            </div>
+
+            <section class="pane pane-code glass-panel" id="pane-code">
+                <div class="pane-header">
+                    <h2><i class="fas fa-code"></i> Python Code</h2>
+                </div>
+                <div class="pane-content" id="code-content">
+                    <pre><code class="language-python" id="code-display">Select a step from the sidebar...</code></pre>
+                </div>
+            </section>
+
+            <section class="pane pane-output glass-panel" id="pane-output">
+                <div class="pane-header">
+                    <h2><i class="fas fa-terminal"></i> Output</h2>
+                </div>
+                <div class="pane-content" id="output-content">
+                    <div class="output-text">Output will appear here...</div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="notebook_data.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
