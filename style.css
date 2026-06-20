@@ -41,6 +41,7 @@ body {
     z-index: -1;
     overflow: hidden;
     background: #000;
+    pointer-events: none; /* Mencegah background menangkap event scroll/klik */
 }
 
 .bg-orb {
@@ -49,6 +50,8 @@ body {
     filter: blur(120px);
     opacity: 0.4;
     animation: aurora 30s infinite alternate ease-in-out;
+    will-change: transform; /* Hardware acceleration */
+    transform: translateZ(0);
 }
 
 .orb-1 { width: 50vw; height: 50vw; background: var(--secondary); top: -20%; left: -10%; }
@@ -56,14 +59,15 @@ body {
 .orb-3 { width: 40vw; height: 40vw; background: var(--primary); top: 30%; left: 40%; animation-delay: -15s; }
 
 @keyframes aurora {
-    0% { transform: translate(0, 0) scale(1) rotate(0deg); }
-    50% { transform: translate(15vw, -10vh) scale(1.1) rotate(45deg); }
-    100% { transform: translate(-5vw, 15vh) scale(0.9) rotate(90deg); }
+    0% { transform: translate3d(0, 0, 0) scale(1) rotate(0deg); }
+    50% { transform: translate3d(15vw, -10vh, 0) scale(1.1) rotate(45deg); }
+    100% { transform: translate3d(-5vw, 15vh, 0) scale(0.9) rotate(90deg); }
 }
 
 .bg-noise {
     position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1; opacity: 0.04;
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    pointer-events: none; /* Penting untuk performa */
 }
 
 /* Shared Glass Panel Styles */
@@ -74,12 +78,15 @@ body {
     border: 1px solid var(--glass-border);
     box-shadow: var(--glass-shadow);
     border-radius: 20px;
+    transform: translateZ(0); /* Memaksa GPU rendering untuk elemen kaca agar tidak lag saat scroll */
 }
 
 /* Dashboard Layout */
 .dashboard-layout {
     display: flex;
+    width: 100%;
     height: 100vh;
+    height: 100dvh; /* Tinggi yang lebih akurat di browser HP (Mobile Safari/Chrome) */
     padding: 20px;
     gap: 20px;
     max-width: 1600px;
@@ -122,11 +129,15 @@ body {
     flex: 1;
     overflow-y: auto;
     padding: 12px;
+    -webkit-overflow-scrolling: touch;
+    will-change: scroll-position;
 }
 
-.sidebar-nav::-webkit-scrollbar { width: 6px; }
-.sidebar-nav::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
-.sidebar-nav::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.2); }
+/* Scrollbar Customization - Dipertebal agar mudah ditarik 1 jari (mouse drag) */
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.1); border-radius: 10px; margin: 10px 0; }
+::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.3); border-radius: 10px; border: 2px solid rgba(0,0,0,0.1); }
+::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.6); }
 
 .nav-item {
     display: flex;
@@ -135,7 +146,7 @@ body {
     border-radius: 12px;
     margin-bottom: 8px;
     cursor: pointer;
-    transition: all 0.3s var(--transition-smooth);
+    transition: all 0.2s var(--transition-smooth); /* Dipercepat untuk mengurangi beban */
     border: 1px solid transparent;
 }
 
@@ -211,17 +222,12 @@ body {
 .pane-content {
     flex: 1;
     overflow-y: auto;
+    overflow-x: hidden; /* Mencegah bentrok dengan scroll horizontal dari elemen code/table di dalamnya */
     padding: 24px;
     position: relative;
-    /* Fancy fade at top/bottom for scrolling content */
-    mask-image: linear-gradient(to bottom, transparent, black 10px, black calc(100% - 10px), transparent);
-    -webkit-mask-image: linear-gradient(to bottom, transparent, black 10px, black calc(100% - 10px), transparent);
+    -webkit-overflow-scrolling: touch;
+    will-change: scroll-position;
 }
-
-.pane-content::-webkit-scrollbar { width: 6px; height: 6px; }
-.pane-content::-webkit-scrollbar-track { background: transparent; }
-.pane-content::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 10px; }
-.pane-content::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.3); }
 
 /* Code Display */
 pre {
@@ -229,6 +235,8 @@ pre {
     padding: 24px;
     border-radius: 16px;
     overflow-x: auto;
+    -webkit-overflow-scrolling: touch; /* PENTING: Memungkinkan scroll 1 jari di perangkat sentuh/HP */
+    touch-action: pan-x pan-y; /* Membuka kunci gestur sentuh */
     font-family: 'JetBrains Mono', monospace;
     font-size: 0.85rem;
     color: #e2e8f0;
@@ -244,6 +252,8 @@ pre {
     border-radius: 16px;
     padding: 16px;
     overflow-x: auto;
+    -webkit-overflow-scrolling: touch; /* PENTING: Memungkinkan scroll 1 jari di tabel/HP */
+    touch-action: pan-x pan-y;
     margin-bottom: 20px;
     border: 1px solid rgba(255,255,255,0.05);
 }
