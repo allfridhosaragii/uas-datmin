@@ -237,8 +237,7 @@ pre {
     padding: 24px;
     border-radius: 16px;
     overflow-x: auto;
-    -webkit-overflow-scrolling: touch; /* PENTING: Memungkinkan scroll 1 jari di perangkat sentuh/HP */
-    touch-action: pan-x pan-y; /* Membuka kunci gestur sentuh */
+    -webkit-overflow-scrolling: touch;
     font-family: 'JetBrains Mono', monospace;
     font-size: 0.85rem;
     color: #e2e8f0;
@@ -254,8 +253,7 @@ pre {
     border-radius: 16px;
     padding: 16px;
     overflow-x: auto;
-    -webkit-overflow-scrolling: touch; /* PENTING: Memungkinkan scroll 1 jari di tabel/HP */
-    touch-action: pan-x pan-y;
+    -webkit-overflow-scrolling: touch;
     margin-bottom: 20px;
     border: 1px solid rgba(255,255,255,0.05);
 }
@@ -330,17 +328,17 @@ pre {
 
 /* Responsive Design */
 @media (max-width: 1024px) {
-    body {
-        overflow: auto; /* Izinkan scroll halaman penuh (Native Scroll) */
-        height: auto;
+    html, body {
+        overflow: auto !important; /* Mengembalikan scroll asli HP dan Pull-to-refresh */
+        height: auto !important;
         min-height: 100vh;
+        display: block !important; /* Mematikan flexbox body yang menahan scroll */
     }
 
     .dashboard-layout {
-        flex-direction: column;
+        display: block !important; /* Susun ke bawah seperti website normal */
         padding: 10px;
-        gap: 10px;
-        height: auto; /* Hilangkan batasan 100vh */
+        height: auto !important;
         min-height: 100vh;
     }
 
